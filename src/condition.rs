@@ -328,14 +328,6 @@ pub fn string_not_in(field: &str, val: Vec<&str>) -> Condition {
     }
 }
 
-pub fn string_matches(field: &str, val: &str) -> Condition {
-    Condition::Condition {
-        field: field.into(),
-        constraint: Constraint::StringMatches(val.into()),
-        path: None,
-    }
-}
-
 /// Creates a rule for int comparison.
 pub fn int_equals(field: &str, val: i64) -> Condition {
     Condition::Condition {
@@ -569,7 +561,7 @@ mod tests {
     use super::{
         and, at_least, bool_equals, int_equals, int_in_range, or, string_equals, string_is_subset
     };
-    use crate::{status::Status, string_matches};
+    use crate::status::Status;
     use serde_json::{json, Value};
 
     fn get_test_data() -> Value {
@@ -726,24 +718,6 @@ mod tests {
         let rule = string_is_subset("foo", vec!["a", "c", "b"]);
         let res = rule.check_value(&map);
         assert_eq!(res.status, Status::Met);
-    }
-
-    #[test]
-    fn string_matches_rule() {
-        let map = json!({ "foo": "a" });
-        let rule = string_matches("foo", "a");
-        let res = rule.check_value(&map);
-        assert_eq!(res.status, Status::Met);
-
-        let map = json!({ "foo": "2022-11-27T18:15:19+00:00" });
-        let rule = string_matches("foo", r"(\d{4})");
-        let res = rule.check_value(&map);
-        assert_eq!(res.status, Status::Met);
-
-        let map = json!({ "foo": "2022-11-27T18:15:19+00:00" });
-        let rule = string_matches("foo", r"(\d{5})");
-        let res = rule.check_value(&map);
-        assert_eq!(res.status, Status::NotMet);
     }
 
     #[test]
