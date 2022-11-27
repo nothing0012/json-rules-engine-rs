@@ -19,6 +19,8 @@ pub enum Constraint {
     StringIn(Vec<String>),
     StringNotIn(Vec<String>),
     StringIsSubset(Vec<String>),
+    StringIsSubstring(String),
+    StringHasSubstring(String),
     IntEquals(i64),
     IntNotEquals(i64),
     IntContains(i64),
@@ -111,18 +113,6 @@ impl Constraint {
                     }
                 }
             }
-            Constraint::StringIsSubset(ref s) => {
-                match Self::value_as_str_array(v) {
-                    None => Status::NotMet,
-                    Some(v) => {
-                        if v.into_iter().any(|y| !s.contains(&y.into())) {
-                            Status::NotMet
-                        } else {
-                            Status::Met
-                        }
-                    }
-                }
-            }
             Constraint::StringContainsAny(ref s) => {
                 match Self::value_as_str_array(v) {
                     None => Status::NotMet,
@@ -173,6 +163,38 @@ impl Constraint {
                 None => Status::NotMet,
                 Some(v) => {
                     if ss.iter().all(|s| s != v) {
+                        Status::Met
+                    } else {
+                        Status::NotMet
+                    }
+                }
+            },
+            Constraint::StringIsSubset(ref s) => {
+                match Self::value_as_str_array(v) {
+                    None => Status::NotMet,
+                    Some(v) => {
+                        if v.into_iter().any(|y| !s.contains(&y.into())) {
+                            Status::NotMet
+                        } else {
+                            Status::Met
+                        }
+                    }
+                }
+            }
+            Constraint::StringIsSubstring(ref s) => match v.as_str() {
+                None => Status::NotMet,
+                Some(v) => {
+                    if s.contains(v) {
+                        Status::Met
+                    } else {
+                        Status::NotMet
+                    }
+                }
+            },
+            Constraint::StringHasSubstring(ref s) => match v.as_str() {
+                None => Status::NotMet,
+                Some(v) => {
+                    if v.contains(s) {
                         Status::Met
                     } else {
                         Status::NotMet
@@ -485,6 +507,6 @@ mod tests {
 
     #[test]
     fn available_operators() {
-        assert_eq!(Constraint::operators().len(), 38);
+        assert_eq!(Constraint::operators().len(), 40);
     }
 }

@@ -298,16 +298,6 @@ pub fn string_does_not_contain_any(field: &str, val: Vec<&str>) -> Condition {
     }
 }
 
-pub fn string_is_subset(field: &str, val: Vec<&str>) -> Condition {
-    Condition::Condition {
-        field: field.into(),
-        constraint: Constraint::StringIsSubset(
-            val.into_iter().map(ToOwned::to_owned).collect(),
-        ),
-        path: None,
-    }
-}
-
 pub fn string_in(field: &str, val: Vec<&str>) -> Condition {
     Condition::Condition {
         field: field.into(),
@@ -324,6 +314,32 @@ pub fn string_not_in(field: &str, val: Vec<&str>) -> Condition {
         constraint: Constraint::StringNotIn(
             val.into_iter().map(ToOwned::to_owned).collect(),
         ),
+        path: None,
+    }
+}
+
+pub fn string_is_subset(field: &str, val: Vec<&str>) -> Condition {
+    Condition::Condition {
+        field: field.into(),
+        constraint: Constraint::StringIsSubset(
+            val.into_iter().map(ToOwned::to_owned).collect(),
+        ),
+        path: None,
+    }
+}
+
+pub fn string_is_substring(field: &str, val: &str) -> Condition {
+    Condition::Condition {
+        field: field.into(),
+        constraint: Constraint::StringIsSubstring(val.into()),
+        path: None,
+    }
+}
+
+pub fn string_has_substring(field: &str, val: &str) -> Condition {
+    Condition::Condition {
+        field: field.into(),
+        constraint: Constraint::StringHasSubstring(val.into()),
         path: None,
     }
 }
@@ -561,7 +577,7 @@ mod tests {
     use super::{
         and, at_least, bool_equals, int_equals, int_in_range, or, string_equals, string_is_subset
     };
-    use crate::status::Status;
+    use crate::{status::Status, string_is_substring, string_has_substring};
     use serde_json::{json, Value};
 
     fn get_test_data() -> Value {
@@ -718,6 +734,32 @@ mod tests {
         let rule = string_is_subset("foo", vec!["a", "c", "b"]);
         let res = rule.check_value(&map);
         assert_eq!(res.status, Status::Met);
+    }
+
+    #[test]
+    fn string_is_substring_rule() {
+        let map = json!({ "foo": "abc" });
+        let rule = string_is_substring("foo", "abcd");
+        let res = rule.check_value(&map);
+        assert_eq!(res.status, Status::Met);
+
+        let map = json!({ "foo": "abc" });
+        let rule = string_is_substring("foo", "ab");
+        let res = rule.check_value(&map);
+        assert_eq!(res.status, Status::NotMet);
+    }
+
+    #[test]
+    fn string_has_substring_rule() {
+        let map = json!({ "foo": "abc" });
+        let rule = string_has_substring("foo", "ab");
+        let res = rule.check_value(&map);
+        assert_eq!(res.status, Status::Met);
+
+        let map = json!({ "foo": "abc" });
+        let rule = string_has_substring("foo", "abcd");
+        let res = rule.check_value(&map);
+        assert_eq!(res.status, Status::NotMet);
     }
 
     #[test]

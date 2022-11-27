@@ -322,6 +322,32 @@
                             "properties": {
                                 "operator": {
                                     "type": "string",
+                                    "enum": ["string_is_substring"]
+                                },
+                                "value": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        {
+                            "type": "object",
+                            "required": ["operator", "value"],
+                            "properties": {
+                                "operator": {
+                                    "type": "string",
+                                    "enum": ["string_has_substring"]
+                                },
+                                "value": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        {
+                            "type": "object",
+                            "required": ["operator", "value"],
+                            "properties": {
+                                "operator": {
+                                    "type": "string",
                                     "enum": ["int_equals"]
                                 },
                                 "value": {
