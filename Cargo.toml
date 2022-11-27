@@ -5,7 +5,7 @@ keywords    = ["json", "rule", "rules", "engine"]
 license     = "MIT/Apache-2.0"
 name        = "json-rules-engine-fork"
 repository  = "https://github.com/nothing0012/json-rules-engine-rs"
-version     = "0.9.4"
+version     = "0.9.5"
 
 [dependencies]
 async-trait  = "0.1"
@@ -13,6 +13,7 @@ erased-serde = "0.3"
 futures-util = { version = "0.3", optional = true }
 jsonpath_lib = { version = "0.2", optional = true }
 mustache     = "0.9"
+regex        = "1"
 reqwest      = { version = "0.11", features = ["json", "rustls-tls"], optional = true }
 rhai         = { version = "0.20", features = [
   "sync",
