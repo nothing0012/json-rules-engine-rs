@@ -1,8 +1,8 @@
 use async_trait::async_trait;
 use erased_serde::Serialize as ErasedSerialize;
 #[cfg(feature = "eval")]
-use json_rules_engine::{from_dynamic, Map};
-use json_rules_engine::{Engine, Error, EventTrait, Rule, Status};
+use json_rules_engine_fork::{from_dynamic, Map};
+use json_rules_engine_fork::{Engine, Error, EventTrait, Rule, Status};
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 use std::{collections::HashMap, rc::Rc, sync::RwLock};

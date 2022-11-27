@@ -11,14 +11,14 @@
 //! ## Example
 //!
 //! ```rust
-//! extern crate json_rules_engine;
+//! extern crate json_rules_engine_fork;
 //! use serde_json::json;
 //!
-//! let tree = json_rules_engine::and(vec![
-//!     json_rules_engine::string_equals("name", "John Doe"),
-//!     json_rules_engine::or(vec![
-//!         json_rules_engine::int_equals("fav_number", 5),
-//!         json_rules_engine::int_in_range("thinking_of", 5, 10)
+//! let tree = json_rules_engine_fork::and(vec![
+//!     json_rules_engine_fork::string_equals("name", "John Doe"),
+//!     json_rules_engine_fork::or(vec![
+//!         json_rules_engine_fork::int_equals("fav_number", 5),
+//!         json_rules_engine_fork::int_in_range("thinking_of", 5, 10)
 //!     ])
 //! ]);
 //! let mut facts = json!({
@@ -29,7 +29,7 @@
 //! {
 //!     let result = tree.check_value(&facts);
 //!     println!("{:?}", result);
-//!     assert!(result.status == json_rules_engine::Status::Met);
+//!     assert!(result.status == json_rules_engine_fork::Status::Met);
 //! }
 //! // result = ConditionResult { name: "And", status: Met, children: [ConditionResult { name: "Name is John Doe", status: Met, children: [] }, ConditionResult { name: "Or", status: Met, children: [ConditionResult { name: "Favorite number is 5", status: Met, children: [] }, ConditionResult { name: "Thinking of a number between 5 and 10", status: Unknown, children: [] }] }] }
 //! ```
